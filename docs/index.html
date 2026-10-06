@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SLP 정착지 찾기</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">SLP <span>은퇴 정착지 찾기</span></div>
+    <nav class="tabs" role="tablist">
+      <button data-view="results" class="active">검색 결과</button>
+      <button data-view="favorites">관심 목록 <b id="favCount">0</b></button>
+      <a id="newSearch" class="tab-link" target="_blank" rel="noopener">+ 새 검색</a>
+      <button data-view="settings">설정</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="view-results" class="view">
+      <div class="row">
+        <label class="grow">검색 선택
+          <select id="searchSelect"></select>
+        </label>
+      </div>
+      <div id="searchMeta" class="meta"></div>
+
+      <details class="filters" open>
+        <summary>결과 안에서 좁혀 보기</summary>
+        <div class="filter-grid">
+          <label>출처 <select id="fSource"><option value="">전체</option></select></label>
+          <label>유형 <select id="fType"><option value="">전체</option></select></label>
+          <label>최대 금액(만원) <input id="fPrice" type="number" inputmode="numeric" placeholder="예: 20000"></label>
+          <label>최소 점수 <input id="fScore" type="number" min="0" max="100" placeholder="0~100"></label>
+          <label>주소·이름 검색 <input id="fText" type="search" placeholder="예: 내면"></label>
+          <label>정렬
+            <select id="fSort">
+              <option value="score">생활 편의 점수 높은 순</option>
+              <option value="price">금액 낮은 순</option>
+              <option value="ratio">시세 대비 싼 순</option>
+              <option value="area">면적 넓은 순</option>
+              <option value="deadline">마감 빠른 순</option>
+            </select>
+          </label>
+          <label class="check"><input id="fHideFav" type="checkbox"> 이미 관심 등록한 것 숨기기</label>
+        </div>
+      </details>
+
+      <div class="row between">
+        <div id="resultCount" class="muted"></div>
+        <div class="seg">
+          <button id="showList" class="on">목록</button>
+          <button id="showMap">지도</button>
+          <button id="showMarket">주변 실거래가</button>
+        </div>
+      </div>
+      <div id="map" hidden></div>
+      <div id="market" hidden></div>
+      <div id="list" class="cards"></div>
+    </section>
+
+    <section id="view-favorites" class="view" hidden>
+      <div class="row between">
+        <p class="muted">직접 조사한 뒤 마음에 드는 물건을 모아 둔 곳입니다. 상태와 메모는 저장소에 기록됩니다.</p>
+        <button id="exportCsv" class="ghost">CSV로 내려받기</button>
+      </div>
+      <div class="row">
+        <label>상태 <select id="favStatusFilter"><option value="">전체</option></select></label>
+      </div>
+      <div id="favList" class="cards"></div>
+    </section>
+
+    <section id="view-settings" class="view" hidden>
+      <h2>설정</h2>
+      <p>관심 물건을 GitHub 저장소(<code>docs/data/favorites.json</code>)에 저장하려면 GitHub 토큰이 한 번 필요합니다.
+        토큰은 이 브라우저에만 보관되고 GitHub 외에는 보내지 않습니다.</p>
+      <ol class="help">
+        <li><a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">GitHub → Fine-grained token 만들기</a></li>
+        <li>Repository access: <b>Only select repositories</b> → 이 저장소만 선택</li>
+        <li>Permissions → Repository permissions → <b>Contents: Read and write</b></li>
+        <li>만든 토큰(<code>github_pat_…</code>)을 아래에 붙여넣기</li>
+      </ol>
+      <label>저장소 <input id="repoInput" placeholder="owner/repo"></label>
+      <label>GitHub 토큰 <input id="tokenInput" type="password" autocomplete="off" placeholder="github_pat_..."></label>
+      <div class="row">
+        <button id="saveSettings">저장하고 연결 확인</button>
+        <button id="clearToken" class="ghost">토큰 지우기</button>
+      </div>
+      <p id="settingsMsg" class="muted"></p>
+    </section>
+  </main>
+
+  <div id="toast" role="status" hidden></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

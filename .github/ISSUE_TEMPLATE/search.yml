@@ -1,0 +1,115 @@
+name: 🔎 정착지 매물 검색
+description: 조건을 고르면 자동으로 경매·공매·매물을 찾아 결과 페이지에 올립니다.
+title: "[검색] "
+labels: ["search"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        조건을 고르고 **Submit new issue**를 누르면 몇 분 안에 검색 결과가 댓글과 결과 페이지에 올라옵니다.
+        조건을 바꾸고 싶으면 이슈 본문을 **Edit** 하면 다시 검색합니다.
+  - type: input
+    id: name
+    attributes:
+      label: 검색 이름
+      description: (선택) 나중에 알아보기 쉬운 이름
+      placeholder: 예) 홍천·횡성 전원주택 2억 이하
+  - type: dropdown
+    id: sido
+    attributes:
+      label: 시도
+      options:
+        - 서울특별시
+        - 부산광역시
+        - 대구광역시
+        - 인천광역시
+        - 광주광역시
+        - 대전광역시
+        - 울산광역시
+        - 세종특별자치시
+        - 경기도
+        - 충청북도
+        - 충청남도
+        - 전라남도
+        - 경상북도
+        - 경상남도
+        - 제주특별자치도
+        - 강원특별자치도
+        - 전북특별자치도
+    validations:
+      required: true
+  - type: input
+    id: sigungu
+    attributes:
+      label: 시군구
+      description: (선택) 쉼표로 여러 개. 비우면 시도 전체를 검색합니다.
+      placeholder: 예) 홍천군, 횡성군
+  - type: checkboxes
+    id: land_types
+    attributes:
+      label: 토지 유형
+      description: 아무것도 고르지 않으면 전체 유형
+      options:
+        - label: 대지
+        - label: 전 (밭)
+        - label: 답 (논)
+        - label: 과수원
+        - label: 임야
+        - label: 잡종지
+        - label: 단독주택
+        - label: 전원주택
+        - label: 농가주택
+  - type: input
+    id: area_min
+    attributes:
+      label: 최소 면적
+      placeholder: 예) 300
+  - type: input
+    id: area_max
+    attributes:
+      label: 최대 면적
+      placeholder: 예) 1000
+  - type: dropdown
+    id: area_unit
+    attributes:
+      label: 면적 단위
+      options:
+        - 평
+        - ㎡
+      default: 0
+  - type: input
+    id: price_min
+    attributes:
+      label: 최소 금액
+      description: 만원 단위 숫자 또는 '1억 5000' 같은 표기
+      placeholder: 예) 5000
+  - type: input
+    id: price_max
+    attributes:
+      label: 최대 금액
+      description: 만원 단위 숫자 또는 '3억' 같은 표기
+      placeholder: 예) 3억
+  - type: checkboxes
+    id: sources
+    attributes:
+      label: 검색 출처
+      options:
+        - label: 온비드 공매
+        - label: 법원경매
+        - label: 네이버 부동산 (비공식 수집, 차단될 수 있음)
+  - type: dropdown
+    id: market_months
+    attributes:
+      label: 실거래가 비교 기간
+      description: 국토부 실거래가로 '주변 시세 대비 몇 %'를 계산합니다
+      options:
+        - "6"
+        - "3"
+        - "12"
+        - "0"
+      default: 0
+  - type: textarea
+    id: memo
+    attributes:
+      label: 메모
+      description: (선택) 이 검색에 대한 메모

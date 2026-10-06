@@ -1,0 +1,11 @@
+{
+  "_설명": "생활 편의 점수 기준. 거리(km)가 near_km 이내면 만점, far_km 이상이면 0점 (카카오 검색 반경이 최대 20km라 far_km는 20 이하로). weight는 비중. category는 카카오 카테고리 코드, keywords는 키워드 검색어 (여러 개면 가장 가까운 것).",
+  "factors": [
+    {"id": "general_hospital", "label": "종합병원", "keywords": ["종합병원", "대학병원"], "near_km": 5, "far_km": 20, "weight": 30},
+    {"id": "clinic", "label": "병·의원", "category": "HP8", "near_km": 3, "far_km": 15, "weight": 15},
+    {"id": "pharmacy", "label": "약국", "category": "PM9", "near_km": 3, "far_km": 15, "weight": 10},
+    {"id": "mart", "label": "대형마트·하나로마트", "category": "MT1", "keywords": ["하나로마트"], "near_km": 3, "far_km": 20, "weight": 15},
+    {"id": "transit", "label": "기차역·버스터미널", "keywords": ["기차역", "버스터미널"], "near_km": 5, "far_km": 20, "weight": 20},
+    {"id": "public_office", "label": "주민센터·면사무소", "keywords": ["행정복지센터", "면사무소"], "near_km": 3, "far_km": 15, "weight": 10}
+  ]
+}
