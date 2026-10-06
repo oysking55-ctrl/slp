@@ -49,7 +49,8 @@ def run(c: Criteria, env: dict, issue: int | None = None, data_dir: Path = store
     elif c.market_months:
         market_msg = "DATA_GO_KR_KEY가 없어 실거래가 비교를 건너뜀"
 
-    score_msg = scoring.score_all(listings, env.get("KAKAO_REST_KEY"), client)
+    # 카카오는 호출 한도가 넉넉해 간격을 짧게 둔다 (물건 수 x 시설 수만큼 호출)
+    score_msg = scoring.score_all(listings, env.get("KAKAO_REST_KEY"), Client(min_interval=0.05))
     listings.sort(key=lambda li: (li.score is None, -(li.score or 0), li.price_manwon or 0))
 
     sid = now.strftime("%Y%m%d-%H%M") + (f"-i{issue}" if issue else "")
