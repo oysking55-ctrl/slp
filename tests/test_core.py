@@ -176,3 +176,25 @@ def test_run_pipeline_offline(tmp_path, monkeypatch):
     assert idx[0]["issue"] == 7
     md = search.summary_markdown(result, "https://x.github.io/slp/")
     assert "1건" in md and "#search=" in md
+
+
+def test_unreachable_host_fails_fast(monkeypatch):
+    import requests
+
+    from slp import http
+
+    calls = []
+
+    def boom(self, method, url, **kw):
+        calls.append(url)
+        raise requests.ConnectTimeout("timed out")
+
+    monkeypatch.setattr(requests.Session, "request", boom)
+    monkeypatch.setattr(http, "DEAD_HOSTS", set())
+    gus = regions.resolve("경기", ["가평군", "양평군"])
+    trades, errors = molit.fetch(http.Client(min_interval=0), "k", gus, months=6)
+    assert trades == [] and len(calls) == 1  # 첫 실패 후 바로 중단
+    assert "접속 불가" in errors[0]
+    with pytest.raises(http.HostUnreachable):
+        http.Client(min_interval=0).get("https://apis.data.go.kr/other")
+    assert len(calls) == 1

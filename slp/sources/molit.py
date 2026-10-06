@@ -8,7 +8,7 @@ from __future__ import annotations
 import datetime as dt
 import logging
 
-from ..http import Client, xml_items
+from ..http import Client, HostUnreachable, xml_items
 from ..models import Trade, normalize_land_type, to_float, to_manwon
 from ..regions import Sigungu
 
@@ -88,6 +88,9 @@ def fetch(client: Client, key: str, sigungu: list[Sigungu], months: int,
                                                 "numOfRows": 1000, "pageNo": 1})
                     items, _ = xml_items(r.text)
                     trades += parser(items, gu)
+                except HostUnreachable as e:
+                    errors.append(str(e))
+                    return trades, errors  # 서버에 닿지 않으면 나머지도 실패한다
                 except Exception as e:  # 한 달치 실패는 전체를 멈추지 않는다
                     msg = f"{gu.full_name} {ym}: {e}"
                     log.warning("실거래가 조회 실패 %s", msg)
